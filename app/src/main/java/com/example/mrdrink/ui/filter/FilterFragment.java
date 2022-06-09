@@ -1,32 +1,30 @@
-package com.example.mrdrink.ui.filterFragment;
+package com.example.mrdrink.ui.filter;
 
-import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 
 import com.example.mrdrink.R;
-import com.example.mrdrink.databinding.FragmentAllBinding;
 import com.example.mrdrink.databinding.FragmentFilterBinding;
-import com.example.mrdrink.ui.GameDataContainer;
-import com.example.mrdrink.ui.gameFragment.GameViewModel;
+
+import java.util.List;
 
 public class FilterFragment extends Fragment {
 
     private FragmentFilterBinding binding;
+
+    ListView filterListView;
+
+    FilterList filterList;
 
     public FilterFragment() {
         // Required empty public constructor
@@ -55,8 +53,25 @@ public class FilterFragment extends Fragment {
         toolbar.setNavigationIcon(R.drawable.back_arrow);
 
         // Lädt das ViewModel vom Game Fragment
-        FilterViewModel gameViewModel =
+        FilterViewModel filterViewModel =
                 new ViewModelProvider(this).get(FilterViewModel.class);
+
+        filterListView = (ListView) root.findViewById(R.id.filter_list);
+
+        filterViewModel.getFiltersList().observe(getViewLifecycleOwner(), new Observer<List<String>>() {
+            @Override
+            public void onChanged(List<String> filtersList) {
+                Log.e("---", "___");
+                if (filtersList.size() != 0) {
+
+                    filterList = new FilterList(getActivity().getApplicationContext(), filtersList);
+                    filterListView.setAdapter(filterList);
+                    root.findViewById(R.id.loadingBarFilterFragment).setVisibility(View.GONE);
+                }
+
+                filterList.notifyDataSetChanged();
+            }
+        });
 
         // Setzt einen Listener auf den zurück Pfeil und leitet das Event auf die zurück Taste weiter
         toolbar.setNavigationOnClickListener(new View.OnClickListener(){

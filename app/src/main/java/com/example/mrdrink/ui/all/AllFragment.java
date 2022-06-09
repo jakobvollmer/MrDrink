@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -16,9 +15,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.mrdrink.MainActivity;
 import com.example.mrdrink.ui.GameDataContainer;
-import com.example.mrdrink.ui.filterFragment.FilterFragment;
+import com.example.mrdrink.ui.filter.FilterFragment;
 import com.example.mrdrink.ui.gameFragment.GameFragment;
 import com.example.mrdrink.R;
 import com.example.mrdrink.databinding.FragmentAllBinding;
@@ -117,5 +115,18 @@ public class AllFragment extends Fragment {
     {
         Log.e("--", search);
         gamePreviewList.getFilter().filter(search);
+    }
+
+    public void setFilterView ()
+    {
+        FragmentManager fm = getParentFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        FilterFragment filterFragment = new FilterFragment();
+
+        // switch to FilterFragment to show selected game
+        ft.replace(getId(), filterFragment);
+        ft.addToBackStack("FilterFragment");
+        ft.setReorderingAllowed(true);
+        ft.commit();
     }
 }

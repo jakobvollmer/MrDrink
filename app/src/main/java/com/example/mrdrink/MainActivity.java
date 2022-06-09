@@ -1,21 +1,14 @@
 package com.example.mrdrink;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Filter;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import com.example.mrdrink.ui.all.AllFragment;
-import com.example.mrdrink.ui.filterFragment.FilterFragment;
-import com.example.mrdrink.ui.gameFragment.GameFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.utils.widget.ImageFilterView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -80,6 +73,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setCallbackForFilter (){
+        ImageButton btn = (ImageButton) findViewById(R.id.filter_menu_btn);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getSupportFragmentManager();
+                Fragment navHostFragment = fm.findFragmentById(R.id.nav_host_fragment_activity_main);
+                Fragment currentPage = navHostFragment.getChildFragmentManager().getFragments().get(0);
 
+                if(currentPage instanceof AllFragment) {
+                    AllFragment allFragment = (AllFragment) currentPage;
+                    allFragment.setFilterView();
+                }
+            }
+        });
     }
 }
